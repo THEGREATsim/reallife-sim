@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RealLife Sim</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #080c18;
+  color: white;
+}
+
+header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #10182c;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.logo span {
+  color: #5275ff;
+}
+
+.play {
+  background: #5275ff;
+  color: white;
+  text-decoration: none;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.hero {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.hero h1 {
+  font-size: 55px;
+  margin: 0 0 20px;
+}
+
+.hero p {
+  color: #aab4ce;
+  max-width: 650px;
+  margin: auto;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.start {
+  display: inline-block;
+  margin-top: 30px;
+  padding: 16px 28px;
+  background: #5275ff;
+  color: white;
+  text-decoration:none;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.features {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.card {
+  background: #151e34;
+  border: 1px solid #293653;
+  padding: 25px;
+  border-radius: 15px;
+}
+
+.card p {
+  color: #9da8c2;
+  line-height: 1.5;
+}
+
+footer {
+  text-align: center;
+  color: #78849e;
+  padding: 40px 20px;
+}
+
+@media(max-width:700px) {
+  .hero h1 {
+    font-size: 42px;
+  }
+
+  .features {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">RealLife <span>Sim</span></div>
+  <a class="play" href="game.html">Play Now</a>
+</header>
+
+<section class="hero">
+
+  <h1>Live Your Life.</h1>
+
+  <p>
+    RealLife Sim is an open-ended life simulation where your
+    choices shape your career, money, relationships and future.
+  </p>
+
+  <a class="start" href="game.html">
+    Start Your Life
+  </a>
+
+</section>
+
+<section class="features">
+
+  <div class="card">
+    <h2>🥊 Careers</h2>
+    <p>
+      Start your journey in Boxing or MMA.
+      Train, compete and build your career.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>❤️ Relationships</h2>
+    <p>
+      Build relationships with family,
+      friends and romantic partners.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>🌎 Your World</h2>
+    <p>
+      Manage money, health, reputation,
+      skills and the decisions that shape your life.
+    </p>
+  </div>
+
+</section>
+
+<footer>
+  RealLife Sim — Early Access
+</footer>
+
+</body>
+</html>
