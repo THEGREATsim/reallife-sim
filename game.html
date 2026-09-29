@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RealLife Sim</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#080c18;color:white}
+.container{max-width:700px;margin:auto;padding:20px}
+h1{margin-top:0}
+.card{background:#151e34;border:1px solid #293653;border-radius:15px;padding:20px;margin-bottom:15px}
+input,select,button{width:100%;padding:13px;margin:7px 0;border-radius:9px;border:0;font-size:16px}
+input,select{background:#222d48;color:white}
+button{background:#5275ff;color:white;font-weight:bold}
+button.secondary{background:#293653}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{background:#10182c;padding:14px;border-radius:10px}
+.stat small{color:#9da8c2}
+.log{background:#10182c;padding:15px;border-radius:10px;min-height:100px;line-height:1.5}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:15px}
+.tabs button{font-size:13px;padding:10px}
+.hidden{display:none}
+.choice{margin-top:8px}
+.good{color:#62e38b}
+.bad{color:#ff6b6b}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>RealLife <span style="color:#5275ff">Sim</span></h1>
+
+<div id="create" class="card">
+<h2>Create Your Life</h2>
+
+<input id="name" placeholder="Your name">
+
+<input id="city" placeholder="City">
+
+<input id="country" placeholder="Country">
+
+<select id="career">
+<option value="Boxing">Boxing</option>
+<option value="MMA">MMA</option>
+</select>
+
+<button onclick="startGame()">Start Life</button>
+</div>
+
+<div id="game" class="hidden">
+
+<div class="card">
+<h2 id="playerName"></h2>
+<p id="date"></p>
+</div>
+
+<div class="stats">
+<div class="stat">💵 Cash<br><b>$<span id="cash"></span></b></div>
+<div class="stat">🏦 Bank<br><b>$<span id="bank"></span></b></div>
+<div class="stat">❤️ Health<br><b><span id="health"></span></b></div>
+<div class="stat">⚡ Energy<br><b><span id="energy"></span></b></div>
+<div class="stat">🥊 Skill<br><b><span id="skill"></span></b></div>
+<div class="stat">⭐ Fans<br><b><span id="fans"></span></b></div>
+</div>
+
+<div class="tabs">
+<button onclick="showTab('life')">Life</button>
+<button onclick="showTab('careerTab')">Career</button>
+<button onclick="showTab('people')">People</button>
+<button onclick="showTab('more')">More</button>
+</div>
+
+<div id="life" class="card">
+<h2>Life</h2>
+
+<button onclick="work()">Work</button>
+<button onclick="train()">Train</button>
+<button onclick="friends()">See Friends</button>
+<button onclick="family()">See Family</button>
+<button onclick="nextMonth()">Advance 1 Month</button>
+</div>
+
+<div id="careerTab" class="card hidden">
+<h2 id="careerTitle"></h2>
+
+<p>Record: <b id="record"></b></p>
+<p>Reputation: <b id="rep"></b></p>
+
+<button onclick="fight()">Fight</button>
+<button onclick="train()">Training Session</button>
+</div>
+
+<div id="people" class="card hidden">
+<h2>Relationships</h2>
+
+<p>👩 Mom: <b id="mom"></b>/100</p>
+<p>👨 Dad: <b id="dad"></b>/100</p>
+<p>👥 Friends: <b id="friendLevel"></b>/100</p>
+<p>❤️ Partner: <b id="partner"></b>/100</p>
+
+<button onclick="date()">Go on a Date</button>
+</div>
+
+<div id="more" class="card hidden">
+<h2>More</h2>
+
+<button onclick="saveGame()">Save Game</button>
+<button onclick="exportGame()">Export Save</button>
+<button class="secondary" onclick="newLife()">New Life</button>
+</div>
+
+<div class="card">
+<h2>What's Happening?</h2>
+<div id="log" class="log">Your life is beginning...</div>
+<div id="choices"></div>
+</div>
+
+</div>
+</div>
+
+<script>
+
+let game = {
+name:"",
+city:"",
+country:"",
+career:"",
+age:18,
+date:"2026-09-29",
+cash:1000,
+bank:0,
+health:100,
+energy:100,
+skill:20,
+fans:0,
+rep:0,
+wins:0,
+losses:0,
+draws:0,
+mom:80,
+dad:70,
+friends:20,
+partner:0
+};
+
+function $(id){
+return document.getElementById(id);
+}
+
+function startGame(){
+
+game.name=$("name").value || "Player";
+game.city=$("city").value || "New York";
+game.country=$("country").value || "USA";
+game.career=$("career").value;
+
+$("create").classList.add("hidden");
+$("game").classList.remove("hidden");
+
+saveGame();
+update();
+
+log("Welcome to RealLife Sim. Your life starts today.");
+}
+
+function update(){
+
+$("playerName").innerText=
+game.name+" — Age "+game.age;
+
+$("date").innerText=
+game.city+", "+game.country+" • "+game.date;
+
+$("cash").innerText=game.cash;
+$("bank").innerText=game.bank;
+$("health").innerText=game.health;
+$("energy").innerText=game.energy;
+$("skill").innerText=game.skill;
+$("fans").innerText=game.fans;
+
+$("careerTitle").innerText=game.career;
+
+$("record").innerText=
+game.wins+"-"+game.losses+"-"+game.draws;
+
+$("rep").innerText=game.rep;
+
+$("mom").innerText=game.mom;
+$("dad").innerText=game.dad;
+$("friendLevel").innerText=game.friends;
+$("partner").innerText=game.partner;
+}
+
+function log(text){
+$("log").innerHTML=text;
+$("choices").innerHTML="";
+}
+
+function choices(list){
+
+$("choices").innerHTML="";
+
+list.forEach((item,index)=>{
+
+let button=document.createElement("button");
+
+button.className="choice";
+button.innerText=(index+1)+". "+item.text;
+
+button.onclick=()=>{
+item.action();
+$("choices").innerHTML="";
+};
+
+$("choices").appendChild(button);
+
+});
+}
+
+function work(){
+
+if(game.energy<15){
+log("You're too tired to work.");
+return;
+}
+
+game.cash+=250;
+game.energy-=15;
+
+log("You worked and earned $250.");
+
+update();
+saveGame();
+}
+
+function train(){
+
+if(game.energy<20){
+log("You're too tired to train.");
+return;
+}
+
+game.energy-=20;
+
+let improvement=Math.random()<0.7?1:2;
+
+game.skill=Math.min(100,game.skill+improvement);
+game.health=Math.max(0,game.health-2);
+
+log("Training complete. Your "+game.career+
+" skill improved by "+improvement+".");
+
+update();
+saveGame();
+}
+
+function friends(){
+
+game.friends=Math.min(100,game.friends+5);
+game.energy=Math.max(0,game.energy-5);
+
+log("You spent time with your friends. Your friendship level increased.");
+
+update();
+saveGame();
+}
+
+function family(){
+
+game.mom=Math.min(100,game.mom+4);
+game.dad=Math.min(100,game.dad+4);
+
+log("You visited your family. They appreciated the time together.");
+
+update();
+saveGame();
+}
+
+function date(){
+
+if(game.partner>0){
+
+game.partner=Math.min(100,game.partner+5);
+
+log("You went on a date. Your relationship became stronger.");
+
+}else{
+
+choices([
+{text:"Talk to someone at a cafe",action:meetPerson},
+{text:"Join a social event",action:meetPerson},
+{text:"Try online dating",action:meetPerson},
+{text:"Focus on your career",action:()=>log("You decided to focus on your career for now.")}
+]);
+
+}
+
+update();
+saveGame();
+}
+
+function meetPerson(){
+
+game.partner=20;
+
+log("You met someone interesting. A new relationship has begun.");
+
+update();
+saveGame();
+}
+
+function fight(){
+
+if(game.energy<30){
+log("You're too tired to fight.");
+return;
+}
+
+game.energy-=30;
+
+let opponent=Math.floor(Math.random()*35)+15;
+
+if(game.skill>=opponent){
+
+game.wins++;
+game.fans+=Math.floor(Math.random()*101)+25;
+game.rep+=5;
+game.cash+=500;
+
+log("🥊 VICTORY! You won your fight and earned $500.");
+
+}else{
+
+game.losses++;
+game.health=Math.max(0,game.health-15);
+game.rep=Math.max(0,game.rep-2);
+
+log("🥊 LOSS. Your opponent was better tonight.");
+}
+
+update();
+saveGame();
+}
+
+function nextMonth(){
+
+let d=new Date(game.date+"T12:00:00");
+
+d.setMonth(d.getMonth()+1);
+
+if(d.getFullYear()>parseInt(game.date.substring(0,4))){
+game.age++;
+}
+
+game.date=d.toISOString().split("T")[0];
+
+game.energy=100;
+game.health=Math.min(100,game.health+10);
+
+let event=Math.floor(Math.random()*4);
+
+if(event===0){
+
+choices([
+{text:"Help your family",action:()=>{game.cash-=100;game.mom+=8;log("You helped your family financially.");}},
+{text:"Give them your time",action:()=>{game.mom+=10;game.dad+=10;log("You spent meaningful time with your family.");}},
+{text:"Focus on work",action:()=>{game.cash+=300;log("You focused on earning money.");}},
+{text:"Do nothing",action:()=>log("You kept your money and focused on yourself.")}
+]);
+
+}else if(event===1){
+
+choices([
+{text:"Train harder",action:()=>{game.skill+=2;game.energy-=20;log("You pushed your training harder.");}},
+{text:"Recover",action:()=>{game.health+=8;log("You focused on recovery.");}},
+{text:"See friends",action:()=>{game.friends+=8;log("You spent more time with friends.");}},
+{text:"Take a month off",action:()=>log("You decided to rest this month.")}
+]);
+
+}else{
+
+log("A quiet month passes. Your life continues to develop.");
+}
+
+game.health=Math.min(100,game.health);
+game.energy=Math.min(100,game.energy);
+
+update();
+saveGame();
+}
+
+function showTab(tab){
+
+["life","careerTab","people","more"].forEach(id=>{
+$(id).classList.add("hidden");
+});
+
+$(tab).classList.remove("hidden");
+}
+
+function saveGame(){
+
+localStorage.setItem("reallifeSimSave",JSON.stringify(game));
+}
+
+function loadGame(){
+
+let saved=localStorage.getItem("reallifeSimSave");
+
+if(saved){
+
+game=JSON.parse(saved);
+
+$("create").classList.add("hidden");
+$("game").classList.remove("hidden");
+
+update();
+}
+
+}
+
+function exportGame(){
+
+let data=JSON.stringify(game,null,2);
+
+let blob=new Blob([data],{type:"application/json"});
+
+let url=URL.createObjectURL(blob);
+
+let a=document.createElement("a");
+
+a.href=url;
+a.download="reallife-sim-save.json";
+a.click();
+
+URL.revokeObjectURL(url);
+}
+
+function newLife(){
+
+if(confirm("Start a completely new life?")){
+
+localStorage.removeItem("reallifeSimSave");
+
+location.reload();
+
+}
+
+}
+
+loadGame();
+
+</script>
+
+</body>
+</html> 
+ 
